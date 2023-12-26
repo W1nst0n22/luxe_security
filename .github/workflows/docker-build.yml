@@ -13,8 +13,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
       - name: Build and Push Docker Image
         run: |
-          docker build -t ghcr.io/W1nst0n22/Discord_Bot:latest .
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u W1nst0n22 --password-stdin
-          docker push ghcr.io/W1nst0n22/Discord_Bot:latest
+          docker buildx create --use
+          docker buildx inspect --bootstrap
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u w1nst0n22 --password-stdin
+          docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/w1nst0n22/luxe_security:latest -f Dockerfile.txt .
+          docker push ghcr.io/w1nst0n22/luxe_security:latest
