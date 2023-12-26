@@ -1,0 +1,20 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t ghcr.io/W1nst0n22/Discord_Bot:latest .
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u W1nst0n22 --password-stdin
+          docker push ghcr.io/W1nst0n22/Discord_Bot:latest
